@@ -1,16 +1,16 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
-import Navbar from './components/Navbar';
 import Home from './components/Home';
+import Blogs from './components/Blogs';
 
 export default function() {
   return (
     <BrowserRouter>
-      <Navbar />
       <Switch>
+        <Route path="/auth/google"/>
         <Route exact path="/" component={Home} />
-        <Route path="/auth/google" />
+        <Route path="/api/blogs" component={Blogs} />
       </Switch>
     </BrowserRouter>
   );
