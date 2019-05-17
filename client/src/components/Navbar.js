@@ -1,5 +1,6 @@
 import React from 'react';
 import { Navbar, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 export default function() {
   return (
@@ -8,7 +9,7 @@ export default function() {
       <Navbar.Toggle />
       <Navbar.Collapse className="justify-content-end">
         <Button bg="dark" variant="dark">
-          SignIn With Google
+          <a href={'/auth/google'}>SignIn With Google</a>
         </Button>
       </Navbar.Collapse>
     </Navbar>

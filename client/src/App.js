@@ -1,19 +1,17 @@
 import React from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 import Navbar from './components/Navbar';
 import Home from './components/Home';
 
-function App() {
-  const renderContent = () => {
-    return <Home />;
-  };
-
+export default function() {
   return (
-    <div className="App">
+    <BrowserRouter>
       <Navbar />
-      {renderContent()}
-    </div>
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route path="/auth/google" />
+      </Switch>
+    </BrowserRouter>
   );
 }
-
-export default App;
