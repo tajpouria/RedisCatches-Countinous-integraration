@@ -11,11 +11,13 @@ require('./services/passport-config');
 // require routes
 const authRoutes = require('./routes/authRoutes');
 const blogRoutes = require('./routes/blogRoutes');
+const apiRoutes = require('./routes/apiRoutes');
 
 const app = express();
 // db connection
+mongoose.Promise = global.Promise;
 const db = config.get('database.mongodb.uri');
-mongoose.connect(db, { useNewUrlParser: true }, err => {
+mongoose.connect(db, { useNewUrlParser: true }, (err) => {
   if (err) {
     winston.error(err.message, err);
     return process.exit(1);
@@ -41,7 +43,8 @@ app.get('/', (req, res) => {
   res.sendFile(path.resolve('client', 'build', 'index.html'));
 });
 app.use('/auth', authRoutes);
-app.use('/api/blogs', blogRoutes);
+app.use('/blogs', blogRoutes);
+app.use('/api', apiRoutes);
 
 const port = process.env.PORT || 5000;
 app.listen(port, winston.info(`Listening on port ${port}...`));
