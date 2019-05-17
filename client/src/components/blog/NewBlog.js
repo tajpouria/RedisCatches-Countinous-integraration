@@ -1,55 +1,79 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import { Form, Button } from 'react-bootstrap';
+import { connect } from 'react-redux';
 
 import Navbar from '../Navbar';
-import postBlog from './postBlog'
+import * as actions from '../../actions';
 
-export default function () {
-   const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+class NewBlog extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      title: '',
+      content: ''
+    };
 
-  const onTitleChange = e => {
+    this.onTitleChange = this.onTitleChange.bind(this);
+    this.onContentChange = this.onContentChange.bind(this);
+    this.onFormSubmit = this.onFormSubmit.bind(this);
+  }
+
+  onTitleChange(e) {
     e.preventDefault();
-    setTitle(e.target.value);
-  };
+    this.setState({ title: e.target.value });
+  }
 
-  const onContentChange = e => {
+  onContentChange(e) {
     e.preventDefault();
-    setContent(e.target.value);
-  };
+    this.setState({ content: e.target.value });
+  }
 
-  const onFormSubmit = () => {
-    return <postBlog title={title} content={content}/>
-  };
+  onFormSubmit() {
+    const {
+      createBlog,
+      history: { push }
+    } = this.props;
+    const { title, content } = this.state;
 
-  return (
-    <React.Fragment>
-      <Navbar path="DASHBOARD" />
-      <Form onSubmit={onFormSubmit}>
-        <div style={{ margin: 25 }}>
-          <Form.Group controlId="exampleForm.ControlInput1">
-            <Form.Label>Title</Form.Label>
-            <Form.Control
-              value={title}
-              onChange={onTitleChange}
-              type="text"
-              placeholder="MyAwesomeBlog"
-            />
-          </Form.Group>
-          <Form.Group controlId="exampleForm.ControlTextarea1">
-            <Form.Label>Content</Form.Label>
-            <Form.Control
-              value={content}
-              onChange={onContentChange}
-              as="textarea"
-              rows="10"
-            />
-          </Form.Group>
-          <Button variant="dark">
-            <a>Done</a>
-          </Button>
-        </div>
-      </Form>
-    </React.Fragment>
-  );
+    createBlog(title, content, push);
+  }
+
+  render() {
+    const { title, content } = this.state;
+    return (
+      <React.Fragment>
+        <Navbar path="DASHBOARD" />
+        <Form>
+          <div style={{ margin: 25 }}>
+            <Form.Group controlId="exampleForm.ControlInput1">
+              <Form.Label>Title</Form.Label>
+              <Form.Control
+                value={title}
+                onChange={this.onTitleChange}
+                type="text"
+                placeholder="MyAwesomeBlog"
+              />
+            </Form.Group>
+            <Form.Group controlId="exampleForm.ControlTextarea1">
+              <Form.Label>Content</Form.Label>
+              <Form.Control
+                value={content}
+                onChange={this.onContentChange}
+                as="textarea"
+                rows="10"
+              />
+            </Form.Group>
+            <Button onClick={this.onFormSubmit} variant="dark">
+              Done
+            </Button>
+          </div>
+        </Form>
+      </React.Fragment>
+    );
+  }
 }
+
+export default connect(
+  null,
+  actions
+)(NewBlog);

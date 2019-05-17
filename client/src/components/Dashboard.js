@@ -3,7 +3,7 @@ import { Card, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import Navbar from './Navbar';
-import BlogReview from './blog/BlogReview'
+import BlogReview from './blog/BlogReview';
 import * as actions from '../actions';
 
 function Dashboard({ getBlogs, blogs }) {
@@ -14,7 +14,7 @@ function Dashboard({ getBlogs, blogs }) {
   const renderBlogs = () => {
     return blogs.map(blog => {
       const { title, content, _id } = blog;
-      return <BlogReview title={title} content={content}_id={_id}/>;
+      return <BlogReview title={title} content={content} _id={_id} />;
     });
   };
 
