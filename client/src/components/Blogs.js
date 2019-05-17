@@ -5,7 +5,7 @@ import Navbar from './Navbar';
 export default function() {
   return (
     <div>
-      <Navbar path="HOME" />
+      <Navbar path="BLOGS" />
       <Card
         style={{
           flex: 1,
@@ -13,8 +13,7 @@ export default function() {
           alignItems: 'center'
         }}
       >
-        <Card.Title>BLOGSTER</Card.Title>
-        <Card.Text>Write private blogs</Card.Text>
+        <Card.Title>BLOGS</Card.Title>
       </Card>
     </div>
   );
