@@ -5,16 +5,27 @@ const mongoose = require('mongoose');
 const util = require('util');
 
 const client = createClient('redis://127.0.0.1:6379');
-client.get = util.promisify(client.get);
+client.hget = util.promisify(client.hget);
 const { exec } = mongoose.Query.prototype;
 
+// should cached?
+mongoose.Query.prototype.cache = function (hashKey = {}) {
+  this.hashKey = JSON.stringify(hashKey);
+  this.shouldCache = true;
+  return this;
+};
+
 mongoose.Query.prototype.exec = async function (...args) {
+  const result = await exec.apply(this, args);
+  // should cached?
+  if (!this.shouldCache) return result;
+
   const key = JSON.stringify(
     Object.assign({}, this.getQuery(), {
       collection: this.mongooseCollection.name,
-    }),
+    })
   );
-  const cacheValue = await client.get(key);
+  const cacheValue = await client.hget(this.hashKey, key);
   // check if have cachedValue return
   if (cacheValue) {
     const doc = JSON.parse(cacheValue);
@@ -23,9 +34,12 @@ mongoose.Query.prototype.exec = async function (...args) {
       : new this.model(doc);
   }
   // set data in redis
-  const result = await exec.apply(this, args);
-  client.set(key, JSON.stringify(result));
+  client.hset(this.hashKey, key, JSON.stringify(result));
   // if not issue query
-  await client.flushall()
+  client.flushall();
   return result;
+};
+
+exports.clearHash = async function (hashKey) {
+  client.del(JSON.stringify(hashKey));
 };

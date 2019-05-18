@@ -26,6 +26,11 @@ mongoose.connect(db, { useNewUrlParser: true }, (err) => {
   }
   return winston.info(`Successfully connected to ${db}`);
 });
+// unhandledRejections
+process.on('unhandledRejection', (ex) => {
+  winston.error(ex.message, ex);
+  return process.exit(1);
+});
 
 winston.add(winston.transports.File, { filename: 'logfile.log' });
 // middleWares

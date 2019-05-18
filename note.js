@@ -260,7 +260,12 @@ mongoose.Query.prototype.exec = function(){
   console.log(this.getQuery) // {_id: "423ljb2kh423234bc"}
   console.log(this.mongooseCollection.name) // users, blogs
 
-  return exec.apply(this, arguments)
+  return exec.apply(this, arguments) 
+
+//   function foo(...args) { es6 instead arguments
+//     console.log(args);
+// }
+
 }
 // coping objects using Object.assign()
 Object.assign({}, this.getQuery(), {collection : this.mongooseCollection.name}) 
@@ -271,12 +276,12 @@ if(cachedValues){
 const doc = JSON.parse(cachedValues)
 
 return Array.isArray(doc)
-  ? doc.map(d => new this.models(d))
-  : new this.models(doc)}
+  ? doc.map(d => new this.model(d))
+  : new this.model(doc)}
 
-// 5. mongoose.prototype.cache
+// 5. mongoose.Query.!prototype.cache
 
-mongoose.prototype.cache = function(){
+mongoose.Query.prototype.cache = function(){
   this._cache = true
   return this // chainAble 
 }
@@ -287,3 +292,5 @@ export default async function(req,res,next){
   await next() //it will back to function after routeHandler completed
   clearHash(req.user.id)
 }
+
+// ## Section Three (Automated headless Browser Testing)
