@@ -1044,3 +1044,16 @@
 {"level":"info","message":"Successfully connected to mongodb://localhost/blogster","timestamp":"2019-05-17T21:25:17.068Z"}
 {"level":"info","message":"Listening on port 5000...","timestamp":"2019-05-17T21:25:28.283Z"}
 {"level":"info","message":"Successfully connected to mongodb://localhost/blogster","timestamp":"2019-05-17T21:25:28.300Z"}
+{"level":"info","message":"Listening on port 5000...","timestamp":"2019-05-18T18:54:46.971Z"}
+{"level":"info","message":"Listening on port 5000...","timestamp":"2019-05-18T18:55:44.458Z"}
+{"message":"connect ECONNREFUSED 127.0.0.1:27017","stack":"MongoNetworkError: connect ECONNREFUSED 127.0.0.1:27017\n    at Socket.err (/home/lenovo/Desktop/blogster/node_modules/mongodb-core/lib/connection/connect.js:287:16)\n    at Object.onceWrapper (events.js:285:13)\n    at Socket.emit (events.js:197:13)\n    at emitErrorNT (internal/streams/destroy.js:82:8)\n    at emitErrorAndCloseNT (internal/streams/destroy.js:50:3)\n    at processTicksAndRejections (internal/process/next_tick.js:76:17)","name":"MongoNetworkError","errorLabels":["TransientTransactionError"],"level":"error","timestamp":"2019-05-18T18:55:44.468Z"}
+{"level":"info","message":"Listening on port 5000...","timestamp":"2019-05-18T18:57:40.812Z"}
+{"level":"info","message":"Successfully connected to mongodb://localhost/blogster","timestamp":"2019-05-18T18:57:40.829Z"}
+{"level":"info","message":"Listening on port 5000...","timestamp":"2019-05-18T18:58:29.980Z"}
+{"level":"info","message":"Successfully connected to mongodb://localhost/blogster","timestamp":"2019-05-18T18:58:29.996Z"}
+{"level":"info","message":"Listening on port 5000...","timestamp":"2019-05-18T18:59:59.155Z"}
+{"level":"info","message":"Successfully connected to mongodb://localhost/blogster","timestamp":"2019-05-18T18:59:59.172Z"}
+{"level":"info","message":"Listening on port 5000...","timestamp":"2019-05-18T19:01:02.153Z"}
+{"level":"info","message":"Successfully connected to mongodb://localhost/blogster","timestamp":"2019-05-18T19:01:02.169Z"}
+{"level":"info","message":"Listening on port 5000...","timestamp":"2019-05-18T19:03:46.165Z"}
+{"level":"info","message":"Successfully connected to mongodb://localhost/blogster","timestamp":"2019-05-18T19:03:46.181Z"}

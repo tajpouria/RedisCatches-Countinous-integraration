@@ -13,6 +13,7 @@ module.exports = mongoose.model(
       type: String,
       minlength: 5,
       default: 'Unmentioned content'
-    }
+    },
+    _user: { type: mongoose.Types.ObjectId, required: true }
   })
 );
