@@ -235,9 +235,11 @@ client.hget('german','red', console.log) //null rot
 // set and get objects
 client.set('colors',JSON.stringify({red:'roho'}))
 client.get('colors',(err,value)=> JSON.parse(value))
-// client.flushall() 
 //expire catch
 client.set('color', 'red', 'EX', 5) //catch will expire after 5 sec.
+// client.flushall() 
+// client.del()
+client.del('colors')
 
 // 3. util.promisify() promisify callback
 
@@ -255,5 +257,33 @@ const exec = mongoose.Query.prototype.exec
 mongoose.Query.prototype.exec = function(){
   console.log('IM ABOUT TO RUN QUERY')
 
-  return exec.app(this, arguments)
+  console.log(this.getQuery) // {_id: "423ljb2kh423234bc"}
+  console.log(this.mongooseCollection.name) // users, blogs
+
+  return exec.apply(this, arguments)
+}
+// coping objects using Object.assign()
+Object.assign({}, this.getQuery(), {collection : this.mongooseCollection.name}) 
+
+// return mongoose document 
+
+if(cachedValues){
+const doc = JSON.parse(cachedValues)
+
+return Array.isArray(doc)
+  ? doc.map(d => new this.models(d))
+  : new this.models(doc)}
+
+// 5. mongoose.prototype.cache
+
+mongoose.prototype.cache = function(){
+  this._cache = true
+  return this // chainAble 
+}
+
+// 6. use middleWare after routeHandler
+
+export default async function(req,res,next){
+  await next() //it will back to function after routeHandler completed
+  clearHash(req.user.id)
 }

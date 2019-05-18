@@ -3,6 +3,7 @@ const Blog = require('../models/Blog');
 
 router.get('/blogs', async (req, res) => {
   const { _id } = req.user;
+
   res.json(await Blog.find({ _user: _id }));
 });
 

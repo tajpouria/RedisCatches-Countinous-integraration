@@ -8,6 +8,8 @@ const express = require('express');
 const path = require('path');
 // google passport-config
 require('./services/passport-config');
+// redis cache
+require('./services/cache')
 // require routes
 const authRoutes = require('./routes/authRoutes');
 const blogRoutes = require('./routes/blogRoutes');
