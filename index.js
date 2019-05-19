@@ -14,7 +14,6 @@ require('./services/cache')
 const authRoutes = require('./routes/authRoutes');
 const blogRoutes = require('./routes/blogRoutes');
 const apiRoutes = require('./routes/apiRoutes');
-
 const app = express();
 // db connection
 mongoose.Promise = global.Promise;
@@ -26,7 +25,7 @@ mongoose.connect(db, { useNewUrlParser: true }, (err) => {
   }
   return winston.info(`Successfully connected to ${db}`);
 });
-// unhandledRejections
+// handling unhandledRejections
 process.on('unhandledRejection', (ex) => {
   winston.error(ex.message, ex);
   return process.exit(1);

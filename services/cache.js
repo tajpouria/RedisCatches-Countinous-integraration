@@ -9,34 +9,32 @@ client.hget = util.promisify(client.hget);
 const { exec } = mongoose.Query.prototype;
 
 // should cached?
-mongoose.Query.prototype.cache = function (hashKey = {}) {
-  this.hashKey = JSON.stringify(hashKey);
+mongoose.Query.prototype.cache = function (options = {}) {
+  this.hashKey = JSON.stringify(options.key || '');
   this.shouldCache = true;
   return this;
 };
-
 mongoose.Query.prototype.exec = async function (...args) {
   const result = await exec.apply(this, args);
   // should cached?
   if (!this.shouldCache) return result;
-
   const key = JSON.stringify(
     Object.assign({}, this.getQuery(), {
       collection: this.mongooseCollection.name,
-    })
+    }),
   );
   const cacheValue = await client.hget(this.hashKey, key);
   // check if have cachedValue return
   if (cacheValue) {
     const doc = JSON.parse(cacheValue);
-    return Array.isArray(cacheValue)
+
+    return Array.isArray(doc)
       ? doc.map(d => new this.model(d))
       : new this.model(doc);
   }
   // set data in redis
   client.hset(this.hashKey, key, JSON.stringify(result));
   // if not issue query
-  client.flushall();
   return result;
 };
 

@@ -5,8 +5,7 @@ const requireAuth = require('../middlewares/requireAuth');
 
 router.get('/blogs', requireAuth, async (req, res) => {
   const { _id } = req.user;
-
-  res.json(await Blog.find({ _user: _id }).cache(_id));
+  res.json(await Blog.find({ _user: _id }).cache({ key: _id }));
 });
 
 router.post('/blogs', requireAuth, clearCache, async (req, res) => {
