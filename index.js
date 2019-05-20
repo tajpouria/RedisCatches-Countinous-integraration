@@ -37,6 +37,7 @@ app.use(bodyParser.json());
 app.use(express.static('client/build'));
 app.use(
   cookieSession({
+    name:'session',
     maxAge: 24 * 60 * 60 * 1000,
     keys: [config.get('session.cookieKey')]
   })
