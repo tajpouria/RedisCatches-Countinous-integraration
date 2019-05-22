@@ -306,7 +306,7 @@ const browser  = await puppeteer.launch({
 })
 
 await browser.close()
-// create a new page
+// create a new pag
 const page = await browser.newPage()
 // navigate or refresh
 await page.goto('localhost:5000')
@@ -319,7 +319,7 @@ const url = await page.url()
 // set cookie
 await page.setCookie({ name: 'session.sig', value: sig})
 // waitFor
-await page.waitFor('a[href="/auth/logout"]')
+await pa ge.waitFor('a[href="/auth/logout"]')
 
 // 2. session base64 toString / String to base64
 const Buffer = require('safe-buffer').Buffer
@@ -333,12 +333,34 @@ Buffer.from('{"passport":{"user":"5cde925b0fad38600a0a5762"}}').toString('base64
 
 // 3. session.sig
 
-const Keygript = require('keygript')
+const Keygript = require('keygrip')
 
 const session = 'rfaseDRF4532hjfalksjih2o349857023j432pio'
 
-const keygript = new Keygript(['key'])
+const keygript = new Keygrip(['key'])
 
-keygript.sign('session=', session) //return sessions.sig
+keygrip.sign('session=', session) //=session outdated return sessions.sig
 
-keygript.verify('session=', session, cookie-sig)
+keygrip.verify('session=', session, cookie-sig)
+
+// 4. _id.toString()
+
+passport:{
+  user: user._id.toString()
+}
+
+// 5. jest global setup ./tests/setup.js
+
+require('./models/User')
+const mongoose = require('mongoose')
+
+mongoose.Promise = global.Promise //tell mongoose to use Global.Promise as Promise
+mongoose.connect('dbURI')
+
+// ./package.json
+// {
+//   "jest":{
+//     "setupTestFrameWorkScriptFile": "./tests/setup.js"
+//   }
+// }
+

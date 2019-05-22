@@ -30,26 +30,25 @@ describe('Navbar', () => {
     expect(url).toMatch(/accounts\.google\.com/);
   });
 
-  it.only('should show signOut whenever user successfully signIn', async () => {
+  it('should show signOut whenever user successfully signIn', async () => {
     const sessionString = '{"passport":{"user":"5cde925b0fad38600a0a5762"}}';
-    const keygrip = new Keygrip([config.get('sessions.cookieKey')]);
-
     const session = Buffer.from(sessionString).toString('base64');
-    const sessionSig = 'VaCD_z1joaYHcwt35xXlagGJjac';
+
+    const keygrip = new Keygrip(['iamawasome']);
+    console.log(keygrip.sign('session=',session));
 
     await page.setCookie({
       name: 'session',
-      value: 'eyJwYXNzcG9ydCI6eyJ1c2VyIjoiNWNkZTkyNWIwZmFkMzg2MDBhMGE1NzYyIn19'
+      value: session
     });
     await page.setCookie({
       name: 'session.sig',
       value: 'VaCD_z1joaYHcwt35xXlagGJjac'
     });
-    await page.goto('localhost:5000/auth/google');
 
-    await page.waitFor('a[href="/auth/logout"]');
+    await page.goto('localhost:5000/blogs');
 
-    const text = page.$eval('a[href="/auth/logout"]').innerHTML;
+    const text = await page.$eval('a[href="/auth/logout"]', el => el.innerHTML);
     expect(text).toEqual('Logout');
   });
 });
