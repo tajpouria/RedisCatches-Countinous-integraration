@@ -31,14 +31,13 @@ process.on('unhandledRejection', (ex) => {
   winston.error(ex.message, ex);
   return process.exit(1);
 });
-console.log(process.env.NODE_ENV)
 winston.add(winston.transports.File, { filename: 'logfile.log' });
 // middleWares
 app.use(bodyParser.json());
 app.use(express.static('client/build'));
 app.use(
   cookieSession({
-    // signed: false,
+    signed: (!process.env.test),
     name: 'session',
     maxAge: 24 * 60 * 60 * 1000,
     keys: [config.get('session.cookieKey')]

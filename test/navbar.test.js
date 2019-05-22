@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
-const { Buffer } = require('safe-buffer');
-const Keygrip = require('keygrip');
-const config = require('config');
+const sessionFactory = require('./factories/session');
+const userFactory = require('./factories/user');
+const User = require('../models/User');
 
 describe('Navbar', () => {
   let browser;
@@ -16,7 +16,8 @@ describe('Navbar', () => {
   });
 
   afterEach(async () => {
-    await browser.close();
+    // await browser.close();
+    await User.deleteMany({});
   });
 
   it('should show BlogSter logo whenever application boots up', async () => {
@@ -30,22 +31,14 @@ describe('Navbar', () => {
     expect(url).toMatch(/accounts\.google\.com/);
   });
 
-  it('should show signOut whenever user successfully signIn', async () => {
-    const sessionString = '{"passport":{"user":"5cde925b0fad38600a0a5762"}}';
-    const session = Buffer.from(sessionString).toString('base64');
-
-    const keygrip = new Keygrip(['iamawasome']);
-    console.log(keygrip.sign('session=',session));
-
+  it.only('should show signOut whenever user successfully signIn', async () => {
+    const user = await userFactory();
+    const session = sessionFactory(user);
+    console.log(session)
     await page.setCookie({
       name: 'session',
       value: session
     });
-    await page.setCookie({
-      name: 'session.sig',
-      value: 'VaCD_z1joaYHcwt35xXlagGJjac'
-    });
-
     await page.goto('localhost:5000/blogs');
 
     const text = await page.$eval('a[href="/auth/logout"]', el => el.innerHTML);
