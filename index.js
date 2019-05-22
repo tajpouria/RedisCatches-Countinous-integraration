@@ -35,6 +35,7 @@ winston.add(winston.transports.File, { filename: 'logfile.log' });
 // middleWares
 app.use(bodyParser.json());
 app.use(express.static('client/build'));
+console.log(process.env.test)
 app.use(
   cookieSession({
     signed: (!process.env.test),

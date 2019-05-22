@@ -1,22 +1,18 @@
-const puppeteer = require('puppeteer');
 const sessionFactory = require('./factories/session');
 const userFactory = require('./factories/user');
 const User = require('../models/User');
+const Page = require('./helpers/page');
 
 describe('Navbar', () => {
-  let browser;
   let page;
 
   beforeEach(async () => {
-    browser = await puppeteer.launch({
-      headless: false
-    });
-    page = await browser.newPage();
+    page = await Page.build();
     await page.goto('localhost:5000');
   });
 
   afterEach(async () => {
-    await browser.close();
+    await page.close();
     await User.deleteMany({});
   });
 

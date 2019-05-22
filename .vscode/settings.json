@@ -1,3 +1,5 @@
 {
-  "eslint.nodePath": "/home/lenovo/.nvm/versions/node/v10.5.0/lib/node_modules/eslint-config-airbnb-standard/node_modules/eslint"
+  "workbench.colorCustomizations": {
+  },
+  "editor.fontSize": 18
 }
