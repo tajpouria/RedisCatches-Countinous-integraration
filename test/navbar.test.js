@@ -16,7 +16,7 @@ describe('Navbar', () => {
   });
 
   afterEach(async () => {
-    // await browser.close();
+    await browser.close();
     await User.deleteMany({});
   });
 
@@ -31,16 +31,15 @@ describe('Navbar', () => {
     expect(url).toMatch(/accounts\.google\.com/);
   });
 
-  it.only('should show signOut whenever user successfully signIn', async () => {
+  it('should show signOut whenever user successfully signIn', async () => {
     const user = await userFactory();
     const session = sessionFactory(user);
-    console.log(session)
+
     await page.setCookie({
       name: 'session',
       value: session
     });
     await page.goto('localhost:5000/blogs');
-
     const text = await page.$eval('a[href="/auth/logout"]', el => el.innerHTML);
     expect(text).toEqual('Logout');
   });
