@@ -266,7 +266,7 @@ mongoose.Query.prototype.exec = function(){
 //     console.log(args);
 // }
 
-}
+} 
 // coping objects using Object.assign()
 Object.assign({}, this.getQuery(), {collection : this.mongooseCollection.name}) 
 
@@ -275,7 +275,7 @@ Object.assign({}, this.getQuery(), {collection : this.mongooseCollection.name})
 if(cachedValues){
 const doc = JSON.parse(cachedValues)
 
-return Array.isArray(doc)
+return Array.isArray(doc) 
   ? doc.map(d => new this.model(d))
   : new this.model(doc)}
 
@@ -283,7 +283,7 @@ return Array.isArray(doc)
 
 mongoose.Query.prototype.cache = function(){
   this._cache = true
-  return this // chainAble 
+  return this // chainAble  
 }
 
 // 6. use middleWare after routeHandler
@@ -294,3 +294,73 @@ export default async function(req,res,next){
 }
 
 // ## Section Three (Automated headless Browser Testing)
+
+// 1. puppeteer and chromium 
+// > sudo npm install puppeteer --unsafe-perm=true --allow-root
+// running only one test test.only('',()=>{})
+
+const puppeteer = require('puppeteer')
+// launch and close browser instance
+const browser  = await puppeteer.launch({
+  // headless: false
+})
+
+await browser.close()
+// create a new pag
+const page = await browser.newPage()
+// navigate or refresh
+await page.goto('localhost:5000')
+// inspect an element
+const text = await page.$eval('brand-logo', el => el.innerHTML) // 'BlogSter'
+// click an element 
+await page.click('.right a')
+// page url
+const url = await page.url()
+// set cookie
+await page.setCookie({ name: 'session.sig', value: sig})
+// waitFor
+await pa ge.waitFor('a[href="/auth/logout"]')
+
+// 2. session base64 toString / String to base64
+const Buffer = require('safe-buffer').Buffer
+
+const session = 'rfaseDRF4532hjfalksjih2o349857023j432pio'
+
+Buffer.from(session, 'bas64').toString() 
+//{ passport: { user: '874oi3haddhghas38407' } }
+
+Buffer.from('{"passport":{"user":"5cde925b0fad38600a0a5762"}}').toString('base64')
+
+// 3. session.sig
+
+const Keygript = require('keygrip')
+
+const session = 'rfaseDRF4532hjfalksjih2o349857023j432pio'
+
+const keygript = new Keygrip(['key'])
+
+keygrip.sign('session=', session) //=session outdated return sessions.sig
+
+keygrip.verify('session=', session, cookie-sig)
+
+// 4. _id.toString()
+
+passport:{
+  user: user._id.toString()
+}
+
+// 5. jest global setup ./tests/setup.js
+
+require('./models/User')
+const mongoose = require('mongoose')
+
+mongoose.Promise = global.Promise //tell mongoose to use Global.Promise as Promise
+mongoose.connect('dbURI')
+
+// ./package.json
+// {
+//   "jest":{
+//     "setupTestFrameWorkScriptFile": "./tests/setup.js"
+//   }
+// }
+

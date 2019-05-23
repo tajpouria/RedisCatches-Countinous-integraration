@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Alert } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import Navbar from '../Navbar';
@@ -10,7 +10,8 @@ class NewBlog extends Component {
     super(props);
     this.state = {
       title: '',
-      content: ''
+      content: '',
+      error: false
     };
 
     this.onTitleChange = this.onTitleChange.bind(this);
@@ -35,7 +36,15 @@ class NewBlog extends Component {
     } = this.props;
     const { title, content } = this.state;
 
+    if (title === '' || content === '')
+      return this.setState({ error: 'Value should provide' });
+
     createBlog(title, content, push);
+  }
+
+  renderError() {
+    if (this.state.error)
+      return <Alert variant="danger">Value Must Be Provided</Alert>;
   }
 
   render() {
@@ -54,6 +63,7 @@ class NewBlog extends Component {
                 placeholder="MyAwesomeBlog"
               />
             </Form.Group>
+            {this.renderError()}
             <Form.Group controlId="exampleForm.ControlTextarea1">
               <Form.Label>Content</Form.Label>
               <Form.Control
@@ -63,7 +73,8 @@ class NewBlog extends Component {
                 rows="10"
               />
             </Form.Group>
-            <Button onClick={this.onFormSubmit} variant="dark">
+            {this.renderError()}
+            <Button id="done" onClick={this.onFormSubmit} variant="dark">
               Done
             </Button>
           </div>

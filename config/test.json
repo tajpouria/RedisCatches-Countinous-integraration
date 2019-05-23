@@ -1,0 +1,10 @@
+{
+  "sessions":{
+    "cookieKey": "iamawasome"
+  },
+  "database": {
+    "mongodb": {
+      "uri": "mongodb://localhost/blogsterTest"
+    }
+  }
+}
