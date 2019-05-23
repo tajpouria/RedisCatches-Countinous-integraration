@@ -1,5 +1,3 @@
-const sessionFactory = require('./factories/session');
-const userFactory = require('./factories/user');
 const User = require('../models/User');
 const Page = require('./helpers/page');
 
@@ -28,15 +26,10 @@ describe('Navbar', () => {
   });
 
   it('should show signOut whenever user successfully signIn', async () => {
-    const user = await userFactory();
-    const session = sessionFactory(user);
+    await page.login();
 
-    await page.setCookie({
-      name: 'session',
-      value: session
-    });
     await page.goto('localhost:5000/blogs');
-    const text = await page.$eval('a[href="/auth/logout"]', el => el.innerHTML);
+    const text = await page.getContextOf('a[href="/auth/logout"]');
     expect(text).toEqual('Logout');
   });
 });
