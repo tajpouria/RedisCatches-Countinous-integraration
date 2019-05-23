@@ -1431,3 +1431,5 @@
 {"level":"info","message":"Successfully connected to mongodb://localhost/blogster","timestamp":"2019-05-19T09:02:03.586Z"}
 {"level":"info","message":"Listening on port 5000...","timestamp":"2019-05-19T09:03:22.600Z"}
 {"level":"info","message":"Successfully connected to mongodb://localhost/blogster","timestamp":"2019-05-19T09:03:22.659Z"}
+{"level":"info","message":"Listening on port 5000...","timestamp":"2019-05-23T06:16:29.480Z"}
+{"level":"info","message":"Successfully connected to mongodb://localhost/blogster","timestamp":"2019-05-23T06:16:29.504Z"}
