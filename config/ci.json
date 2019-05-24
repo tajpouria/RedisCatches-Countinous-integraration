@@ -1,0 +1,16 @@
+{
+  "name": "Blogster webApp-Development",
+  "googleOauth": {
+    "clientID": "53705118724-d82c92loun2v6o8vohid7m293jdsdbab.apps.googleusercontent.com",
+    "clientSecret": "eBjewtFWQy7-7UJMKc6Mx6P3"
+  },
+  "database": {
+    "mongodb": {
+      "uri": "mongodb://127.0.0.1/blog_ci"
+    }
+  },
+  "session": {
+    "cookieKey": "imamawasome"
+  },
+  "redisUrl": "redis://127.0.0.1:6379"
+}

@@ -8,7 +8,7 @@ describe('Navbar', () => {
 
   beforeEach(async () => {
     page = await Page.build();
-    await page.goto('localhost:5000');
+    await page.goto('http://localhost:5000');
   });
 
   afterEach(async () => {

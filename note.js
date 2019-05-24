@@ -302,14 +302,15 @@ export default async function(req,res,next){
 const puppeteer = require('puppeteer')
 // launch and close browser instance
 const browser  = await puppeteer.launch({
-  // headless: false
+  headless: false,
+  args: ['--no-sandbox'] // decreasing time of running tests
 })
 
 await browser.close()
 // create a new pag
 const page = await browser.newPage()
 // navigate or refresh
-await page.goto('localhost:5000')
+await page.goto('http://localhost:5000')
 // inspect an element
 const text = await page.$eval('brand-logo', el => el.innerHTML) // 'BlogSter'
 // click an element 
@@ -462,3 +463,50 @@ post(path, data) {
     }).then(res => res.json())
   }, path, data); //receive args and it will pass it to function
 }
+
+// for (result of results)
+
+// ## Continuos Integration CI
+
+// 1. YAML is simplify version of writing json
+
+color : 'red'
+number : 3000
+// nested data
+languageIKnow:
+    english: 'very well'
+    germany: 'not at all'
+// array
+countToFive:
+  - 'one'
+  - 'two'
+
+// 2. Trivia .travis.yml
+
+language: node_js
+node_js:
+  _ "11"
+dist: trusty
+services: 
+  - mongodb
+  - redis-server
+env:
+  - NODE_ENV=ci
+  - PORT = 5000
+  - test = true
+cache:
+  directories:
+    _ node_modules
+    _ client/node_modules
+install:
+  - npm install 
+  _ npm run build
+script:
+  - nohup npm run start &
+  - sleep 3
+  - npm run test 
+
+// alb GIT
+// >git remote -v // fetch and push origin
+// >git remote remove origin
+// >git remote add origin git@blah

@@ -9,7 +9,8 @@ class CustomPage {
 
   static async build() {
     const browser = await puppeteer.launch({
-      headless: false
+      headless: false,
+      args: ['--no-sandbox']
     });
 
     const page = await browser.newPage();
@@ -32,7 +33,7 @@ class CustomPage {
       value: session
     });
 
-    await this.page.goto('localhost:5000/blogs');
+    await this.page.goto('http://localhost:5000/blogs');
   }
 
   async getContextOf(selector) {
