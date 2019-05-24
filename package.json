@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "concurrently \"nodemon\" \"cd client && npm start \"  ",
-    "test": "jest --watchAll"
+    "test": "jest --watchAll --verbose"
   },
   "keywords": [],
   "author": "",

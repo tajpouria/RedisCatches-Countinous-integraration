@@ -60,25 +60,23 @@ describe('Blogs', () => {
   });
 
   describe('user NOT loggedIn ', () => {
-    it('should return an error when user not loggedIn and try to post a blog.', async () => {
-      const result = await page.evaluate(() => {
-        return fetch('/api/blogs', {
-          method: 'POST',
-          credentials: 'same-origin',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ title: 'T', content: 'C' })
-        }).then(res => res.json());
-      });
-      expect(result).toEqual({ error: 'require login' });
-    });
+    const actions = [
+      {
+        method: 'get',
+        path: '/api/blogs'
+      },
+      {
+        method: 'post',
+        path: '/api/blogs',
+        data: { title: 'T', content: 'C' }
+      }
+    ];
 
-    it('should return an error when user not loggedIn and try to send a get request to blogs', async () => {
-      const result = await page.evaluate(() =>
-        fetch('/api/blogs').then(res => res.json())
-      );
-      expect(result).toEqual({ error: 'require login' });
+    it('prohibited actions', async () => {
+      const results = await page.sendRequest(actions);
+
+      for (result of results)
+        expect(result).toEqual({ error: 'require login' });
     });
   });
 });

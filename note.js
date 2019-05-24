@@ -314,6 +314,8 @@ await page.goto('localhost:5000')
 const text = await page.$eval('brand-logo', el => el.innerHTML) // 'BlogSter'
 // click an element 
 await page.click('.right a')
+// type into input
+await page.type('form title', 'MyTitle')
 // page url
 const url = await page.url()
 // set cookie
@@ -360,7 +362,103 @@ mongoose.connect('dbURI')
 // ./package.json
 // {
 //   "jest":{
-//     "setupTestFrameWorkScriptFile": "./tests/setup.js"
+//     "setupTestFrameworkScriptFile": "./tests/setup.js"
 //   }
 // }
 
+// 6. Proxies 
+//used to give objects custom behavior
+
+//e.g.1
+const p = new Proxy({},{
+  get: function(target, key){
+    return key in target ? target[key] : 37
+  }
+})
+p.a = 1
+console.log(p.a, p.b) //1 , 37
+//e.g.2
+const validator = {
+  set : function(target, key, value){
+    if(key === 'age'){
+      if(typeof value === 'number' || Number.NaN(value)){
+        console.log('age must be a number.')
+      }
+      if(value <0) {
+        console.log('the age must be greater than zero.')
+      }
+
+      target[key] = value
+      return true
+    }
+  }
+}
+
+const p = new Proxy({}, validator)
+p.age = 'young' // age must be a number
+p.age = -1 // age must be greater than zero
+p.age = 100 
+
+//e.g.3
+class Page {
+  goto(){
+    console.log('going to some others url.')
+  }
+}
+
+class CustomPage {
+  constructor(page){
+    this.page = page
+  }
+
+  login(){
+    console.log('I m trying logging in.')
+  }
+
+  static build(){
+    const page = new Page() 
+    
+    return new Proxy(new CustomPage(page), {
+      get: function(target, props){
+        return target[props] || page[props]
+      }
+    })
+  }
+}
+
+const customPage = new CustomPage.build()
+
+customPage.goto() // going to some other url 
+customPage.login() // I m trying to logging in 
+
+// 7. jest.setTimeout(30000)
+
+// 8. page.evaluate fetch
+
+const result = await page.evaluate(()=>{
+  return fetch('/api/blogs',{
+  method: 'POST',
+  credentials: 'same-origin',
+  headers:{
+    'Content-Type' : 'application/json'
+  },
+  body: JSON.stringify({title: 'myTitle', content: 'myContent'})
+}).then(res => res.json())
+})
+
+expect(result).toEqual({error: 'you not logged in'})
+
+// page.evaluate gotcha turn to string (passing argument to evaluate):
+
+post(path, data) {
+  return this.page.evaluate((_path, _data)=>{
+    return fetch(_path, {
+      method : 'POST',
+      credentials : 'same-origin',
+      headers : {
+        'Content-Type' : 'application/json'
+      },
+      body : JSON.stringify(_data)
+    }).then(res => res.json())
+  }, path, data); //receive args and it will pass it to function
+}
