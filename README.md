@@ -1,11 +1,8 @@
-
-
-
-# note 
+# note
 
 ## Section One (Project Setup)
 
-```javascript 
+```javascript
 //1. cocurrently setup {"dev": "concurrently \"nodemon\" \"cd client && npm start \" "}
 
 //2. body-parser middleware >npm i body-parser
@@ -90,8 +87,10 @@ router.get('/logout',(req, res)=>{
   res.redirect('/')
 })
 ```
+
 ## subSection One (HOC)
-```javascript   
+
+```javascript
 //1. React-Router-Dom recap:
 //  >npm i react-router-dom
 
@@ -210,88 +209,118 @@ const Resources =()=> <div>Access Available just for who's logged in!</div>
 
 export default requireAuth(Resources)
 ```
- ## SectionTwo (Data Caching with Redis)
-```javascript 
+
+## SectionTwo (Data Caching with Redis)
+
+```javascript
 // 1.redis-cli
 // run-server >~/redis-5.0.5/src/redis-server
 // interact >~/redis-5.0.5/src/redis-cli
 
-// 2. node-redis interact 
-// >npm i redis 
+// 2. node-redis interact
+// >npm i redis
 
-const redis = require('redis')
-const redisUrl = 'redis://127.0.0.1:6379'
-const client = redis.createClient(redisUrl)
+const redis = require('redis');
+const redisUrl = 'redis://127.0.0.1:6379';
+const client = redis.createClient(redisUrl);
 // set and get
 client.set('foo', 'bar');
-client.get('foo', console.log) //null bar
+client.get('foo', console.log); //null bar
 // set and get hash
-client.hset('german','red','rot')
-client.hget('german','red', console.log) //null rot
+client.hset('german', 'red', 'rot');
+client.hget('german', 'red', console.log); //null rot
 // set and get objects
-client.set('colors',JSON.stringify({red:'roho'}))
-client.get('colors',(err,value)=> JSON.parse(value))
+client.set('colors', JSON.stringify({ red: 'roho' }));
+client.get('colors', (err, value) => JSON.parse(value));
 //expire catch
-client.set('color', 'red', 'EX', 5) //catch will expire after 5 sec.
-// client.flushall() 
+client.set('color', 'red', 'EX', 5); //catch will expire after 5 sec.
+// client.flushall()
 // client.del()
-client.del('colors')
+client.del('colors');
 
 // 3. util.promisify() promisify callback
 
-const util = require('util')
-client.get = util.promisify(client.get)
+const util = require('util');
+client.get = util.promisify(client.get);
 
-const value = await client.get('key')
+const value = await client.get('key');
 
 // 4. add some logic to mongoose exec
 
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
-const exec = mongoose.Query.prototype.exec
+const exec = mongoose.Query.prototype.exec;
 
-mongoose.Query.prototype.exec = function(){
-  console.log('IM ABOUT TO RUN QUERY')
+mongoose.Query.prototype.exec = function() {
+  console.log('IM ABOUT TO RUN QUERY');
 
-  console.log(this.getQuery) // {_id: "423ljb2kh423234bc"}
-  console.log(this.mongooseCollection.name) // users, blogs
+  console.log(this.getQuery); // {_id: "423ljb2kh423234bc"}
+  console.log(this.mongooseCollection.name); // users, blogs
 
-  return exec.apply(this, arguments) 
+  return exec.apply(this, arguments);
 
-//   function foo(...args) { es6 instead arguments
-//     console.log(args);
-// }
-
-} 
+  //   function foo(...args) { es6 instead arguments
+  //     console.log(args);
+  // }
+};
 // coping objects using Object.assign()
-Object.assign({}, this.getQuery(), {collection : this.mongooseCollection.name}) 
+Object.assign({}, this.getQuery(), {
+  collection: this.mongooseCollection.name
+});
 
-// return mongoose document 
+// return mongoose document
 
-if(cachedValues){
-const doc = JSON.parse(cachedValues)
+if (cachedValues) {
+  const doc = JSON.parse(cachedValues);
 
-return Array.isArray(doc) 
-  ? doc.map(d => new this.model(d))
-  : new this.model(doc)}
+  return Array.isArray(doc)
+    ? doc.map(d => new this.model(d))
+    : new this.model(doc);
+}
 
 // 5. mongoose.Query.!prototype.cache
 
-mongoose.Query.prototype.cache = function(){
-  this._cache = true
-  return this // chainAble  
-}
+mongoose.Query.prototype.cache = function() {
+  this._cache = true;
+  return this; // chainAble
+};
 
 // 6. use middleWare after routeHandler
 
-export default async function(req,res,next){
-  await next() //it will back to function after routeHandler completed
-  clearHash(req.user.id)
+export default async function(req, res, next) {
+  await next(); //it will back to function after routeHandler completed
+  clearHash(req.user.id);
 }
 ```
- ## Section Three (Automated headless Browser Testing)
-```javascript 
-// 1. puppeteer and chromium 
+
+## SubSection Two(Component LifeCycle)
+
+[![Edit silly-dewdney-bgdyu](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/silly-dewdney-bgdyu?fontsize=14)
+
+```javascript
+componentWillMount  //Immediately before initial rendering
+componentDidMount  //Immediately after initial rendering
+componentWillReceiveProps(nextProps)  //Immediately after component receives new props
+shouldComponentUpdate(nextProps, nextState)  //:true(:false to prevent rendering)  Before rendering or after receiving new props or state
+componentWillUpdate(nextProps, nextState)  //Before rendering or after receiving ne Props or state and after ComponentShouldUpdate:true
+componentDidUpdate(preProps, prevState)  //After component updates are flushed to DOM
+ComponentWillUnmount()  //Immediately before removing component form DOM
+
+static getDrivedStateFromProps(props, state)  //:object called before other methods using to copy props into state
+
+// allow us to capture prevProps and prevStates everything retured will pass as snapShout
+// to componentWillUpdate
+  getSnapshotBeforeUpdate(){
+    return null
+  }
+
+componentDidCatch(err, info)  // handle errors
+```
+
+## Section Three (Automated headless Browser Testing)
+
+```javascript
+// 1. puppeteer and chromium
 // > sudo npm install puppeteer --unsafe-perm=true --allow-root
 // running only one test test.only('',()=>{})
 
@@ -309,7 +338,7 @@ const page = await browser.newPage()
 await page.goto('http://localhost:5000')
 // inspect an element
 const text = await page.$eval('brand-logo', el => el.innerHTML) // 'BlogSter'
-// click an element 
+// click an element
 await page.click('.right a')
 // type into input
 await page.type('form title', 'MyTitle')
@@ -325,7 +354,7 @@ const Buffer = require('safe-buffer').Buffer
 
 const session = 'rfaseDRF4532hjfalksjih2o349857023j432pio'
 
-Buffer.from(session, 'bas64').toString() 
+Buffer.from(session, 'bas64').toString()
 //{ passport: { user: '874oi3haddhghas38407' } }
 
 Buffer.from('{"passport":{"user":"5cde925b0fad38600a0a5762"}}').toString('base64')
@@ -363,7 +392,7 @@ mongoose.connect('dbURI')
 //   }
 // }
 
-// 6. Proxies 
+// 6. Proxies
 //used to give objects custom behavior
 
 //e.g.1
@@ -394,7 +423,7 @@ const validator = {
 const p = new Proxy({}, validator)
 p.age = 'young' // age must be a number
 p.age = -1 // age must be greater than zero
-p.age = 100 
+p.age = 100
 
 //e.g.3
 class Page {
@@ -413,8 +442,8 @@ class CustomPage {
   }
 
   static build(){
-    const page = new Page() 
-    
+    const page = new Page()
+
     return new Proxy(new CustomPage(page), {
       get: function(target, props){
         return target[props] || page[props]
@@ -425,8 +454,8 @@ class CustomPage {
 
 const customPage = new CustomPage.build()
 
-customPage.goto() // going to some other url 
-customPage.login() // I m trying to logging in 
+customPage.goto() // going to some other url
+customPage.login() // I m trying to logging in
 
 // 7. jest.setTimeout(30000)
 
@@ -462,7 +491,9 @@ post(path, data) {
 
 // for (result of results)
 ```
- ## Section Four (Continuos Integration CI)
+
+## Section Four (Continuos Integration CI)
+
 ```javascript
 // 1. YAML is simplify version of writing json
 
@@ -483,7 +514,7 @@ language: node_js
 node_js:
   _ "11"
 dist: trusty
-services: 
+services:
   - mongodb
   - redis-server
 env:
@@ -495,24 +526,26 @@ cache:
     _ node_modules
     _ client/node_modules
 install:
-  - npm install 
+  - npm install
   _ npm run build
 script:
   - nohup npm run start &
   - sleep 3
-  - npm run test 
+  - npm run test
 
 // alb GIT
 // >git remote -v // fetch and push origin
 // >git remote remove origin
 // >git remote add origin git@blah
 ```
+
 ## Section Five (ScaleAbleImageUploading)
-```javascript 
+
+```javascript
 // file input
-<input 
-  type="file" 
-  accept="image/*" 
+<input
+  type="file"
+  accept="image/*"
   onChange={this.onFileChange.bind(this)}
 />
 

@@ -94,7 +94,7 @@ router.get('/logout',(req, res)=>{
   res.redirect('/')
 })
 
-//##subSection One (HOC)
+//##subSection One (quick review of HOC, Hooks, and context)
 
 //1. React-Router-Dom recap:
 //  >npm i react-router-dom
@@ -213,6 +213,29 @@ import requireAuth from './requireAuth'
 const Resources =()=> <div>Access Available just for who's logged in!</div>
 
 export default requireAuth(Resources)
+
+// ## SubSection Two(Component LifeCycle)
+
+[![Edit silly-dewdney-bgdyu](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/silly-dewdney-bgdyu?fontsize=14)
+
+componentWillMount  //Immediately before initial rendering
+componentDidMount  //Immediately after initial rendering
+componentWillReceiveProps(nextProps)  //Immediately after component receives new props
+shouldComponentUpdate(nextProps, nextState)  //:true(:false to prevent rendering)  Before rendering or after receiving new props or state
+componentWillUpdate(nextProps, nextState)  //Before rendering or after receiving ne Props or state and after ComponentShouldUpdate:true 
+componentDidUpdate(preProps, prevState)  //After component updates are flushed to DOM
+ComponentWillUnmount()  //Immediately before removing component form DOM
+
+static getDrivedStateFromProps(props, state)  //:object called before other methods using to copy props into state
+
+// allow us to capture prevProps and prevStates everything retured will pass as snapShout
+// to componentWillUpdate
+  getSnapshotBeforeUpdate(){
+    return null
+  }
+
+componentDidCatch(err, info)  // handle errors
+
 
 //## SectionTwo (Data Caching with Redis)
 
@@ -466,7 +489,7 @@ post(path, data) {
 
 // for (result of results)
 
-// ## Continuos Integration CI
+// ## Section Four (Continuos Integration CI)
 
 // 1. YAML is simplify version of writing json
 
@@ -510,3 +533,15 @@ script:
 // >git remote -v // fetch and push origin
 // >git remote remove origin
 // >git remote add origin git@blah
+
+// ## Section Five (ScaleAbleImageUploading)
+
+// file input
+<input 
+  type="file" 
+  accept="image/*" 
+  onChange={this.onFileChange.bind(this)}
+/>
+
+const onFileChange (e)=> console.log(e.targe.files[0]) // just one file
+
